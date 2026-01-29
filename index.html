@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="description" content="منيو عالرصيف | عراقي/عربي + عبري — صور لكل منتج."/>
+  <link rel="icon" href="shop.png"/>
+  <meta property="og:title" content="عالرصيف | المنيو"/>
+  <meta property="og:description" content="منيو عربي + عبري مع صور لكل منتج."/>
+  <meta property="og:image" content="shop.png"/>
+  <meta property="og:type" content="website"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <title>عالرصيف | المنيو</title>
+  <meta name="theme-color" content="#0c0c0f"/>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <style>
+    :root{
+      --bg:#0c0c0f;
+      --text:#f7f7fb;
+      --muted:#b9bbc6;
+      --muted2:#8f92a4;
+      --accent:#f0c36a;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --r: 22px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% -10%, rgba(240,195,106,.22), transparent 60%),
+        radial-gradient(900px 560px at 95% 5%, rgba(255,255,255,.06), transparent 55%),
+        radial-gradient(900px 700px at 50% 110%, rgba(209,166,90,.15), transparent 55%),
+        var(--bg);
+      padding-bottom:92px;
+    }
+    /* تم إلغاء خلفية خاصة لقسم الميلك شيك بناءً على الطلب */
+    .wrap{max-width:1120px; margin:0 auto; padding:0 16px}
+    header{
+      position:sticky; top:0; z-index:30;
+      background: rgba(12,12,15,.78);
+      backdrop-filter: blur(14px);
+      border-bottom:1px solid var(--border);
+    }
+    .top{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:14px 0;
+      flex-wrap:wrap;
+    }
+    .brand{display:flex; align-items:center; gap:12px}
+    .logo{
+      width:44px; height:44px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(240,195,106,.25), rgba(240,195,106,.06));
+      border:1px solid rgba(240,195,106,.28);
+      display:grid; place-items:center;
+      box-shadow: 0 12px 30px rgba(0,0,0,.35);
+    }
+    .logo span{font-size:20px}
+    .brand h1{margin:0; font-size:18px}
+    .brand p{margin:2px 0 0; color:var(--muted); font-size:12.5px}
+    .actions{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding:10px 12px;
+      border-radius: 999px;
+      text-decoration:none;
+      font-size:13px;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn.primary{
+      border-color: rgba(240,195,106,.55);
+      background: rgba(240,195,106,.16);
+    }
+    .hero{padding:14px 0 6px}
+    .heroCard{
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border-radius: var(--r);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .heroInner{
+      padding:14px;
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .search{
+      flex:1; min-width:240px;
+      display:flex; gap:10px; align-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.24);
+      padding:10px 12px;
+      border-radius: 16px;
+    }
+    .search input{
+      width:100%;
+      border:0; outline:0;
+      background: transparent;
+      color: var(--text);
+      font-size:14px;
+    }
+    .chipRow{
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+    .chip{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      color: var(--muted);
+      padding:9px 12px;
+      border-radius: 999px;
+      font-size:12.5px;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    .chip .he{opacity:.85}
+    .chip.active{
+      border-color: rgba(240,195,106,.55);
+      background: rgba(240,195,106,.14);
+      color: var(--text);
+    }
+    .sectionTitle{
+      margin:14px 0 10px;
+      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+      flex-wrap:wrap;
+    }
+    .sectionTitle h2{margin:0; font-size:16px}
+    .sectionTitle span{color:var(--muted2); font-size:12.5px}
+
+    .grid{
+      display:grid; gap:14px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (min-width:760px){
+      .grid{grid-template-columns: repeat(3, minmax(0, 1fr));}
+    }
+    @media (min-width:1040px){
+      .grid{grid-template-columns: repeat(4, minmax(0, 1fr));}
+    }
+
+    .card{
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.04);
+      border-radius: 18px;
+      overflow:hidden;
+      box-shadow: 0 16px 40px rgba(0,0,0,.45);
+      transition: transform .15s ease, border-color .15s ease, background .15s ease;
+      cursor:pointer;
+    }
+    .card:hover{transform: translateY(-2px); border-color: rgba(240,195,106,.35); background: rgba(255,255,255,.05)}
+    .thumb{
+      height:150px;
+      background: rgba(0,0,0,.22);
+      border-bottom:1px solid rgba(255,255,255,.10);
+      padding:10px;
+      display:grid;
+      place-items:stretch;
+    }
+    .thumb img{width:100%; height:100%; object-fit:cover; border-radius:14px}
+    .body{padding:12px 12px 14px}
+    .nameAr{margin:0; font-size:13.5px; line-height:1.35}
+    .nameHe{margin:6px 0 0; font-size:12.8px; line-height:1.25; color:var(--muted); direction:ltr; text-align:left}
+    .meta{
+      margin-top:10px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .price{
+      color: var(--text);
+      font-weight: 800;
+      letter-spacing:.2px;
+    }
+    .catPill{
+      font-size:11.5px;
+      color: var(--muted);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      padding:6px 10px;
+      border-radius: 999px;
+      white-space:nowrap;
+    }
+    .bottomBar{
+      position:fixed; left:0; right:0; bottom:0;
+      background: rgba(12,12,15,.82);
+      backdrop-filter: blur(14px);
+      border-top:1px solid var(--border);
+      z-index:40;
+    }
+    .bottomInner{
+      max-width:1120px; margin:0 auto;
+      padding:12px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      flex-wrap:wrap;
+    }
+    .small{color:var(--muted); font-size:12.5px}
+    .footerLinks{display:flex; gap:10px; flex-wrap:wrap}
+
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,.78);
+      display:none;
+      z-index:80;
+      padding:18px;
+    }
+    .modal.open{display:flex}
+    .modalCard{
+      margin:auto;
+      width:min(980px, 100%);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius: 22px;
+      overflow:hidden;
+      background: rgba(12,12,14,.92);
+      box-shadow: var(--shadow);
+    }
+    .modalTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .modalTop strong{font-size:14px}
+    .modalTop button{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      padding:9px 12px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-size:13px;
+    }
+    .modalImg img{width:100%; height:auto; display:block; background:#000}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><span>☀️</span></div>
+        <div>
+          <h1>عالرصيف</h1>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="shareBtn">🔗 مشاركة</button>
+        <button class="btn" id="openGalleryBtn">🖼️ المنيو الأصلي</button>
+        <button class="btn" id="showQRBtn">📱 QR Code</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="heroCard">
+        <div class="heroInner">
+          <div class="search" role="search">
+            🔎 <input id="q" placeholder="ابحثي… / חיפוש… (مثال: لوتس / לוטוס)" />
+          </div>
+          <div class="chipRow" id="chips"></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="sectionTitle">
+      <h2 id="title">كل المنتجات</h2>
+      <span id="count"></span>
+    </div>
+
+    <section class="grid" id="grid"></section>
+  </main>
+
+  <div class="bottomBar" role="navigation" aria-label="شريط سريع">
+    <div class="bottomInner">
+      <div class="small">امسحي QR → يفتح المنيو فورًا ✅</div>
+      <div class="footerLinks">
+        <a class="btn primary" href="#" id="toTop">⬆️ للأعلى</a>
+        <a class="btn" href="shop.png" target="_blank" rel="noopener">🏠 صورة المحل</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true">
+      <div class="modalTop">
+        <strong id="modalTitle">عرض</strong>
+        <button type="button" id="closeModal">إغلاق ✕</button>
+      </div>
+      <div class="modalImg">
+        <img id="modalImg" src="" alt="" decoding="async" loading="lazy"/>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="qrModal" aria-hidden="true">
+    <div class="modalCard" role="dialog" aria-modal="true" style="max-width: 400px;">
+      <div class="modalTop">
+        <strong>QR Code - مسح لفتح المنيو</strong>
+        <button type="button" id="closeQRModal">إغلاق ✕</button>
+      </div>
+      <div style="padding: 24px; text-align: center; background: #fff;">
+        <canvas id="qrCanvas" style="max-width: 100%; height: auto;"></canvas>
+        <p style="margin-top: 16px; color: #333; font-size: 13px; word-break: break-all;" id="qrUrl"></p>
+        <p id="qrWarning" style="margin-top: 12px; padding: 10px; background: rgba(255,193,7,.15); border: 1px solid rgba(255,193,7,.4); border-radius: 8px; color: #333; font-size: 12px; display: none;"></p>
+        <button class="btn" style="margin-top: 12px; background: rgba(240,195,106,.16); border-color: rgba(240,195,106,.55);" id="copyQRUrl">📋 نسخ الرابط</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="menu-data.js"></script>
+  <script>
+    const data = window.MENU_DATA || [];
+    const grid = document.getElementById('grid');
+    const chips = document.getElementById('chips');
+    const q = document.getElementById('q');
+    const title = document.getElementById('title');
+    const count = document.getElementById('count');
+
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+
+    let activeCat = "الكل";
+
+    function flatItems(){
+      const out = [];
+      data.forEach(section=>{
+        section.items.forEach(it=>{
+          out.push({
+            cat_ar: section.cat_ar,
+            cat_he: section.cat_he,
+            defaultPrice: section.price,
+            name_ar: it.name_ar,
+            name_he: it.name_he,
+            note: it.note || "",
+            img: it.img
+          });
+        });
+      });
+      return out;
+    }
+
+    function cats(){
+      return ["الكل", ...data.map(s=> s.cat_ar + " | " + s.cat_he)];
+    }
+
+    function renderChips(){
+      chips.innerHTML = "";
+      cats().forEach(c=>{
+        const b = document.createElement('button');
+        b.className = 'chip' + (c===activeCat ? ' active':'');
+        if(c==="الكل"){
+          b.innerHTML = `الكل <span class="he">| הכל</span>`;
+        }else{
+          const parts = c.split(" | ");
+          b.innerHTML = `${parts[0]} <span class="he">| ${parts[1]}</span>`;
+        }
+        b.onclick = ()=>{ activeCat=c; render(); };
+        chips.appendChild(b);
+      });
+    }
+
+    function matches(item, query){
+      if(!query) return true;
+      const s = (item.name_ar + " " + item.name_he + " " + item.cat_ar + " " + item.cat_he).toLowerCase();
+      return s.includes(query.toLowerCase());
+    }
+
+    function openModal(src, t){
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden','false');
+      modalImg.src = src;
+      modalImg.alt = t || '';
+      modalTitle.textContent = t || 'عرض';
+      document.body.style.overflow = 'hidden';
+    }
+    function closeModal(){
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden','true');
+      modalImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('closeModal').onclick = closeModal;
+    modal.addEventListener('click', (e)=>{ if(e.target===modal) closeModal(); });
+    document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeModal(); });
+
+    document.getElementById('openGalleryBtn').onclick = ()=> openModal('menu-original.png', 'المنيو الأصلي');
+    document.getElementById('toTop').onclick = (e)=>{ e.preventDefault(); window.scrollTo({top:0, behavior:'smooth'}); };
+
+    // QR Code functionality
+    const qrModal = document.getElementById('qrModal');
+    const qrCanvas = document.getElementById('qrCanvas');
+    const qrUrl = document.getElementById('qrUrl');
+    const showQRBtn = document.getElementById('showQRBtn');
+    const closeQRModal = document.getElementById('closeQRModal');
+    const copyQRUrlBtn = document.getElementById('copyQRUrl');
+
+    function generateQRCode() {
+      const currentUrl = window.location.href;
+      qrUrl.textContent = currentUrl;
+      const qrWarning = document.getElementById('qrWarning');
+      
+      // Check if running locally
+      const isLocal = currentUrl.startsWith('file://') || 
+                     currentUrl.startsWith('http://localhost') || 
+                     currentUrl.startsWith('http://127.0.0.1') ||
+                     currentUrl.includes('localhost');
+      
+      if (isLocal) {
+        qrWarning.style.display = 'block';
+        qrWarning.textContent = '⚠️ للعمل من أجهزة أخرى، يجب رفع الموقع على خادم (server) أو استخدام خدمة כמו GitHub Pages';
+      } else {
+        qrWarning.style.display = 'none';
+      }
+      
+      // Clear canvas
+      const ctx = qrCanvas.getContext('2d');
+      ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+      
+      // Generate QR code
+      QRCode.toCanvas(qrCanvas, currentUrl, {
+        width: 300,
+        margin: 2,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        }
+      }, function (error) {
+        if (error) {
+          console.error('QR Code generation error:', error);
+          qrUrl.textContent = 'خطأ في إنشاء QR Code. الرابط: ' + currentUrl;
+        }
+      });
+    }
+
+    function openQRModal() {
+      qrModal.classList.add('open');
+      qrModal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      generateQRCode();
+    }
+
+    function closeQRModalFunc() {
+      qrModal.classList.remove('open');
+      qrModal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    showQRBtn.onclick = openQRModal;
+    closeQRModal.onclick = closeQRModalFunc;
+    qrModal.addEventListener('click', (e) => {
+      if (e.target === qrModal) closeQRModalFunc();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && qrModal.classList.contains('open')) {
+        closeQRModalFunc();
+      }
+    });
+
+    copyQRUrlBtn.onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        copyQRUrlBtn.textContent = '✅ تم النسخ!';
+        setTimeout(() => {
+          copyQRUrlBtn.textContent = '📋 نسخ الرابط';
+        }, 2000);
+      } catch (err) {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = window.location.href;
+        textArea.style.position = 'fixed';
+        textArea.style.opacity = '0';
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          copyQRUrlBtn.textContent = '✅ تم النسخ!';
+          setTimeout(() => {
+            copyQRUrlBtn.textContent = '📋 نسخ الرابط';
+          }, 2000);
+        } catch (err) {
+          alert('الرابط: ' + window.location.href);
+        }
+        document.body.removeChild(textArea);
+      }
+    };
+
+    async function share(){
+      const url = window.location.href;
+      try{
+        if(navigator.share){
+          await navigator.share({title:'منيو عالرصيف', text:'رابط المنيو', url});
+        }else{
+          await navigator.clipboard.writeText(url);
+          alert('تم نسخ الرابط ✅');
+        }
+      }catch(e){}
+    }
+    document.getElementById('shareBtn').onclick = share;
+
+    function render(){
+      const query = q.value.trim();
+      const items = flatItems()
+        .filter(it => activeCat==="الكل" ? true : (it.cat_ar + " | " + it.cat_he)===activeCat)
+        .filter(it => matches(it, query));
+
+      if(activeCat==="الكل"){
+        title.textContent = "كل المنتجات";
+      }else{
+        const parts = activeCat.split(" | ");
+        title.textContent = parts[0] + " | " + parts[1];
+      }
+      // خلفية الميلك شيك الخاصة تم إلغاؤها
+
+      count.textContent = items.length ? (items.length + " منتج") : "لا يوجد نتائج";
+
+      grid.innerHTML = "";
+      items.forEach(it=>{
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="thumb">
+            <img src="${it.img}" alt="" loading="lazy" decoding="async">
+          </div>
+          <div class="body">
+            <p class="nameAr">${it.name_ar}</p>
+            <p class="nameHe">${it.name_he}</p>
+            <div class="meta">
+              <span class="price">${(it.note ? it.note : it.defaultPrice) || '—'}</span>
+              <span class="catPill">${it.cat_ar}</span>
+            </div>
+          </div>
+        `;
+        card.onclick = ()=> openModal(it.img, it.name_ar + " | " + it.name_he);
+        grid.appendChild(card);
+      });
+    }
+
+    q.addEventListener('input', render);
+    renderChips();
+    render();
+
+    // בדיקת תקינות תמונות
+    function validateImages() {
+      const missingImages = [];
+      const allItems = flatItems();
+      
+      allItems.forEach(item => {
+        if (item.img) {
+          // בדיקה שהנתיב יחסי ולא מקומי
+          if (item.img.match(/^(C:|D:|file:\/\/|Users\/|OneDrive\/)/i)) {
+            console.warn('⚠️ נתיב מקומי נמצא:', item.img, '(', item.name_ar, ')');
+            missingImages.push({ path: item.img, name: item.name_ar });
+          }
+        }
+      });
+
+      // בדיקה שהתמונות נטענות בהצלחה
+      let checkedCount = 0;
+      const totalImages = allItems.length;
+      
+      allItems.forEach(item => {
+        if (item.img) {
+          const img = new Image();
+          img.onload = () => {
+            checkedCount++;
+            if (checkedCount === totalImages) {
+              console.log(`✅ כל התמונות נטענו בהצלחה (${totalImages} תמונות)`);
+            }
+          };
+          img.onerror = () => {
+            console.warn('❌ תמונה חסרה או לא נטענה:', item.img, '(', item.name_ar, ')');
+            missingImages.push({ path: item.img, name: item.name_ar });
+            checkedCount++;
+            if (checkedCount === totalImages && missingImages.length > 0) {
+              console.warn(`⚠️ נמצאו ${missingImages.length} תמונות חסרות`);
+            }
+          };
+          img.src = item.img;
+        } else {
+          checkedCount++;
+        }
+      });
+
+      // בדיקה שהתיקייה assets/photos קיימת (בדיקה בסיסית)
+      console.log('📁 בדיקת מבנה תיקיות:');
+      console.log('  - assets/photos/ (כל הנתיבים מצביעים לכאן)');
+      
+      return missingImages;
+    }
+
+    // הרצת בדיקת תקינות לאחר טעינת הדף
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(validateImages, 1000); // המתן קצת לטעינת התמונות
+      });
+    } else {
+      setTimeout(validateImages, 1000);
+    }
+  </script>
+</body>
+</html>
