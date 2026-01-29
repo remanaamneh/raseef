@@ -299,7 +299,11 @@
         <button type="button" id="closeQRModal">إغلاق ✕</button>
       </div>
       <div style="padding: 24px; text-align: center; background: #fff;">
-        <canvas id="qrCanvas" style="max-width: 100%; height: auto;"></canvas>
+        <div id="qrInputContainer" style="margin-bottom: 16px; display: none;">
+          <input type="text" id="qrUrlInput" placeholder="https://remanaamneh.github.io/raseef/" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 13px; margin-bottom: 8px;" />
+          <button class="btn" style="background: rgba(240,195,106,.16); border-color: rgba(240,195,106,.55);" id="generateQRBtn">إنشاء QR Code</button>
+        </div>
+        <canvas id="qrCanvas" style="max-width: 100%; height: auto; display: block; margin: 0 auto;"></canvas>
         <p style="margin-top: 16px; color: #333; font-size: 13px; word-break: break-all;" id="qrUrl"></p>
         <p id="qrWarning" style="margin-top: 12px; padding: 10px; background: rgba(255,193,7,.15); border: 1px solid rgba(255,193,7,.4); border-radius: 8px; color: #333; font-size: 12px; display: none;"></p>
         <button class="btn" style="margin-top: 12px; background: rgba(240,195,106,.16); border-color: rgba(240,195,106,.55);" id="copyQRUrl">📋 نسخ الرابط</button>
@@ -414,31 +418,79 @@
         qrWarning.style.display = 'none';
       }
       
-      // Clear canvas
+      // Remove any existing fallback images
+      const existingImg = qrCanvas.parentNode.querySelector('img[data-qr-fallback]');
+      if (existingImg) {
+        existingImg.remove();
+      }
+      
+      // Function to use fallback API
+      function useFallbackQR(url) {
+        const qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + encodeURIComponent(url);
+        qrCanvas.style.display = 'none';
+        const img = document.createElement('img');
+        img.setAttribute('data-qr-fallback', 'true');
+        img.src = qrApiUrl;
+        img.style.maxWidth = '100%';
+        img.style.height = 'auto';
+        img.style.display = 'block';
+        img.style.margin = '0 auto';
+        img.alt = 'QR Code';
+        qrCanvas.parentNode.insertBefore(img, qrCanvas.nextSibling);
+      }
+      
+      // Check if QRCode library is loaded
+      if (typeof QRCode === 'undefined') {
+        console.error('QRCode library not loaded, using fallback API...');
+        useFallbackQR(currentUrl);
+        return;
+      }
+      
+      // Set canvas size explicitly
+      qrCanvas.width = 300;
+      qrCanvas.height = 300;
+      qrCanvas.style.display = 'block';
+      
+      // Clear canvas with white background
       const ctx = qrCanvas.getContext('2d');
-      ctx.clearRect(0, 0, qrCanvas.width, qrCanvas.height);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, qrCanvas.width, qrCanvas.height);
       
       // Generate QR code
-      QRCode.toCanvas(qrCanvas, currentUrl, {
-        width: 300,
-        margin: 2,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        }
-      }, function (error) {
-        if (error) {
-          console.error('QR Code generation error:', error);
-          qrUrl.textContent = 'خطأ في إنشاء QR Code. الرابط: ' + currentUrl;
-        }
-      });
+      try {
+        QRCode.toCanvas(qrCanvas, currentUrl, {
+          width: 300,
+          margin: 2,
+          color: {
+            dark: '#000000',
+            light: '#FFFFFF'
+          }
+        }, function (error) {
+          if (error) {
+            console.error('QR Code generation error:', error);
+            useFallbackQR(currentUrl);
+            qrWarning.style.display = isLocal ? 'block' : 'none';
+          } else {
+            console.log('QR Code generated successfully for:', currentUrl);
+            qrWarning.style.display = isLocal ? 'block' : 'none';
+          }
+        });
+      } catch (error) {
+        console.error('QR Code generation exception:', error);
+        useFallbackQR(currentUrl);
+        qrWarning.style.display = isLocal ? 'block' : 'none';
+      }
     }
 
     function openQRModal() {
       qrModal.classList.add('open');
       qrModal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
-      generateQRCode();
+      
+      // Wait a bit to ensure modal is visible before generating QR
+      setTimeout(() => {
+        generateQRCode();
+      }, 100);
     }
 
     function closeQRModalFunc() {
@@ -458,9 +510,24 @@
       }
     });
 
+    // Handle generate QR button click
+    const generateQRBtn = document.getElementById('generateQRBtn');
+    const qrUrlInput = document.getElementById('qrUrlInput');
+    if (generateQRBtn) {
+      generateQRBtn.onclick = () => {
+        const inputUrl = qrUrlInput.value.trim();
+        if (inputUrl && (inputUrl.startsWith('http://') || inputUrl.startsWith('https://'))) {
+          generateQRCode(inputUrl);
+        } else {
+          alert('يرجى إدخال رابط صحيح يبدأ بـ http:// أو https://');
+        }
+      };
+    }
+
     copyQRUrlBtn.onclick = async () => {
+      const urlToCopy = qrUrl.textContent || window.location.href;
       try {
-        await navigator.clipboard.writeText(window.location.href);
+        await navigator.clipboard.writeText(urlToCopy);
         copyQRUrlBtn.textContent = '✅ تم النسخ!';
         setTimeout(() => {
           copyQRUrlBtn.textContent = '📋 نسخ الرابط';
@@ -468,7 +535,7 @@
       } catch (err) {
         // Fallback for older browsers
         const textArea = document.createElement('textarea');
-        textArea.value = window.location.href;
+        textArea.value = urlToCopy;
         textArea.style.position = 'fixed';
         textArea.style.opacity = '0';
         document.body.appendChild(textArea);
